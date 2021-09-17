@@ -1,5 +1,9 @@
 package it.aesys.flutter_video_cast
 
+import android.net.Uri
+import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.common.images.WebImage
+
 import android.content.Context
 import android.view.ContextThemeWrapper
 import androidx.mediarouter.app.MediaRouteButton
@@ -33,25 +37,7 @@ class ChromeCastController(
     private fun loadMedia(args: Any?) {
         if (args is Map<*, *>) {
             val url = args["url"] as? String
-            var title = args["title"] as? String
-            var subTitle = args["subTitle"] as? String
-            val imgUrl = args["imgUrl"] as? String
-            val bigImageUrl = args["imgUrl"] as? String
-
-            if(title.isNullOrEmpty()){
-                title =  ""
-            }
-            if(subTitle.isNullOrEmpty()){
-                subTitle =  ""
-            }
-
-            val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
-            movieMetadata.putString(MediaMetadata.KEY_TITLE, (title))
-            movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, subTitle)
-            movieMetadata.addImage(WebImage(Uri.parse(imgUrl)))
-            movieMetadata.addImage(WebImage(Uri.parse(bigImageUrl)))
-
-            val media = MediaInfo.Builder(url).setMetadata(movieMetadata).build()
+            val media = MediaInfo.Builder(url).build()
             val options = MediaLoadOptions.Builder().build()
             val request = sessionManager?.currentCastSession?.remoteMediaClient?.load(media, options)
             request?.addStatusListener(this)
