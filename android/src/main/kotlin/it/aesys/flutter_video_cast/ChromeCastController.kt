@@ -49,7 +49,13 @@ class ChromeCastController(
                 subTitle =  ""
             }
 
-            val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
+           val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
+            movieMetadata.putString(MediaMetadata.KEY_TITLE, (title))
+            movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, subTitle)
+            movieMetadata.addImage(WebImage(Uri.parse(imgUrl)))
+            movieMetadata.addImage(WebImage(Uri.parse(bigImageUrl)))
+
+            val media = MediaInfo.Builder(url).setMetadata(movieMetadata).build()
             val options = MediaLoadOptions.Builder().build()
             val request = sessionManager?.currentCastSession?.remoteMediaClient?.load(media, options)
             request?.addStatusListener(this)
